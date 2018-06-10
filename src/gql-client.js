@@ -22,15 +22,3 @@ export const gqlClient = new ApolloClient({
     }
   })
 });
-
-/*export const gqlClient = new ApolloClient({
-  uri: "https://api.github.com/graphql",
-
-  request: operation => {
-    return operation.setContext({
-      headers: {
-        authorization: GITHUB_TOKEN ? `Bearer ${GITHUB_TOKEN}` : ""
-      }
-    });
-  }
-});*/

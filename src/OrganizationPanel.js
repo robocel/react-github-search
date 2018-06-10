@@ -4,7 +4,7 @@ export const OrganizationPanel = ({ org }) => (
   <div
     style={{
       display: "flex",
-      "flex-direction": "row"
+      flexDirection: "row"
     }}
   >
     <div>
@@ -17,7 +17,7 @@ export const OrganizationPanel = ({ org }) => (
     </div>
     <div
       style={{
-        "flex-grow": "1"
+        flexGrow: "1"
       }}
     >
       <div>
