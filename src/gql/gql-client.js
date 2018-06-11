@@ -1,4 +1,4 @@
-import { GITHUB_TOKEN } from "./token";
+import { GITHUB_TOKEN } from "../utils";
 import ApolloClient from "apollo-client";
 import {
   InMemoryCache,
@@ -7,6 +7,7 @@ import {
 import { HttpLink } from "apollo-link-http";
 import { GITHUB_SCHEMAS } from "./github-schemas";
 
+// This matcher allows Apollo to handle GitHub's union type results.
 const fragmentMatcher = new IntrospectionFragmentMatcher(GITHUB_SCHEMAS);
 
 const cache = new InMemoryCache({

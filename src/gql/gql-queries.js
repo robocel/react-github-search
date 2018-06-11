@@ -1,6 +1,12 @@
 import gql from "graphql-tag";
 
-export const MATCHING_USERS = gql`
+/**
+ * Currently, we're re-using the same query for paginating forwards
+ * and backwards. This is not ideal. TODO: Break this up into multiple
+ * queries conditionally used when going forward/back! Share the
+ * fragments between the two queries!
+ */
+export const SEARCH_USERS_QUERY = gql`
   query(
     $queryString: String!
     $forwardCursor: String

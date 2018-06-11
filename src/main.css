@@ -9,3 +9,192 @@ body {
   vertical-align: text-top;
   fill: currentColor;
 }
+
+/* Styles ripped directly from GitHub and not totally de-duped. TODO: Break this up! */
+.paginationBtn {
+  padding: 7px 12px;
+  margin-left: -1px;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
+  color: #0366d6;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  background: #fff;
+  border: 1px solid #e1e4e8;
+}
+
+/* Styles ripped directly from GitHub and not totally de-duped. TODO: Break this up! */
+.search-input {
+  padding: 6px 8px;
+  line-height: 20px;
+  color: #24292e;
+  vertical-align: middle;
+  background-color: #fff;
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  border: 1px solid #d1d5da;
+  box-shadow: inset 0 1px 2px rgba(27, 31, 35, 0.075);
+}
+
+/* Styles ripped directly from GitHub and not totally de-duped. TODO: Break this up! */
+.searchBtn {
+  color: #24292e;
+  background-color: #eff3f6;
+  background-image: linear-gradient(-180deg, #fafbfc 0%, #eff3f6 90%);
+  position: relative;
+  display: inline-block;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  background-repeat: repeat-x;
+  background-position: -1px -1px;
+  background-size: 110% 110%;
+  border: 1px solid rgba(27, 31, 35, 0.2);
+  border-radius: 0.25em;
+}
+
+/* 
+  I generally like using functional CSS, but I didn't 
+  have the time to layout a complete set of functional classes.
+  I didn't pull in an entire functional CSS framework, because I
+  didn't have the time to configure it and map the GH styles to it.
+  So, I made a smattering of functional classes as an general guide.
+*/
+
+.bgc-1 {
+  background: black;
+}
+
+.bgc-2 {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.bgc-t {
+  background: rgba(0, 0, 0, 0);
+}
+
+.c-1 {
+  color: white;
+}
+
+.text-decoration-none {
+  text-decoration: none;
+}
+
+.list-style-none {
+  list-style: none;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-grow {
+  flex-grow: 1;
+}
+
+.flex-align-center {
+  display: flex;
+  align-items: center;
+}
+
+.flex-space-evenly {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.mb-0 {
+  margin-bottom: 0;
+}
+
+.mb-1 {
+  margin-bottom: 16px;
+}
+
+.ml-1 {
+  margin-left: 12px;
+}
+
+.ml-2 {
+  margin-left: 8px;
+}
+
+.mr-1 {
+  margin-right: 12px;
+}
+
+.mr-2 {
+  margin-right: 16px;
+}
+
+.mt-1 {
+  margin-top: 12px;
+}
+
+.mt-2 {
+  margin-top: 8px;
+}
+
+.pxy-0 {
+  padding: 12px;
+}
+
+.pl-0 {
+  padding-left: 0;
+}
+
+.py-1 {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.fw-1 {
+  font-weight: 600;
+}
+
+.fw-2 {
+  font-weight: 400;
+}
+
+.fs-1 {
+  font-size: 20px;
+}
+
+.fs-2 {
+  font-size: 16px;
+}
+
+.fs-3 {
+  font-size: 18px;
+}
+
+.fs-4 {
+  font-size: 12px;
+}
+
+.fs-5 {
+  font-size: 14px;
+}
+
+.no-outline {
+  outline: none;
+}
+
+.no-border {
+  border: 0;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.br-1 {
+  border-radius: 3px;
+}

@@ -1,188 +1,69 @@
 import React from "react";
 import { render } from "react-dom";
-import { ApolloProvider, Query } from "react-apollo";
-import { gqlClient } from "./gql-client";
-import { MATCHING_USERS } from "./gql-queries";
-import { UserPanel } from "./UserPanel";
-import { OrganizationPanel } from "./OrganizationPanel";
-import queryString from "query-string";
-import { IconGithub } from "./IconGithub";
+import { ApolloProvider } from "react-apollo";
+import { gqlClient } from "./gql/gql-client";
+import { SearchModule } from "./search";
+import { Header } from "./layout";
+
+import { parseSearchString, writeHistory } from "./utils";
 
 import "./main.css";
 
 class App extends React.Component {
+  /*
+    Didn't intend for it to work out this way, but all the 
+    state ended up at the root. It's still way too simple 
+    of an app to bother pulling in something like Redux. But,
+    if we extended this out to include more modules and more
+    shared state, then it might be a good fit.
+  */
   state = {
     query: "",
-    startCursor: null
+    initialCursor: null
   };
 
-  onSearch = event => {
-    let query = event.target.value;
-    window.history.pushState({}, "", `?q=${query}`);
-    this.setState({
-      query: query,
-      startCursor: null
-    });
+  onSearchChanged = query => {
+    writeHistory({ q: query });
+    // Whenever we set a new query, we reset the
+    // initial cursor to a null value. That prevents
+    // any accidental jumping in the result set if
+    // there is crossover between two result sets.
+    this.setState({ query, initialCursor: null });
   };
 
   componentDidMount = () => {
-    let { q, s } = queryString.parse(window.location.search);
+    // This lets us deep-link into our result set.
+    // That means we can browse to people's GH profiles,
+    // and then come right back to where we left off.
+    let { q, s } = parseSearchString();
     if (q) {
       this.setState({
         query: q,
-        startCursor: s || null
+        initialCursor: s || null
       });
     }
   };
 
   render() {
+    /*
+      We're doing some primitive routing here. Didn't
+      feel worth it pulling in React Router or similar
+      for what amounts to a single page. Near the end
+      though it almost seemed like a good idea. Just 
+      needed a couple more hours. 
+    */
     return (
       <ApolloProvider client={gqlClient}>
         <React.Fragment>
-          <div
-            style={{
-              backgroundColor: "black",
-              paddingTop: "12px",
-              paddingBottom: "12px",
-              color: "rgba(255,255,255,0.75)"
-            }}
-          >
-            <IconGithub />
-            <input
-              type="text"
-              value={this.state.query}
-              onChange={this.onSearch}
-            />
-          </div>
-          <Query
-            query={MATCHING_USERS}
-            variables={{
-              queryString: this.state.query,
-              forwardCursor: this.state.startCursor,
-              backwardsCursor: null,
-              flimit: 10,
-              blimit: null
-            }}
-          >
-            {({ loading, error, data, fetchMore }) => {
-              if (loading) return <div>Loading...</div>;
-              if (error) return <div>Error: {error}</div>;
-              return (
-                <React.Fragment>
-                  <div
-                    style={{
-                      fontSize: "20px",
-                      fontWeight: "600",
-                      marginBottom: "16px"
-                    }}
-                  >
-                    {data.search.userCount} Results
-                  </div>
-                  {data.search.nodes.map(
-                    user =>
-                      user.__typename === "User" ? (
-                        <UserPanel key={user.login} user={user} />
-                      ) : (
-                        <OrganizationPanel key={user.login} org={user} />
-                      )
-                  )}
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-evenly"
-                    }}
-                  >
-                    {data.search.pageInfo.hasPreviousPage ? (
-                      <button
-                        style={{
-                          position: "relative",
-                          float: "left",
-                          padding: "7px 12px",
-                          marginLeft: "-1px",
-                          fontSize: "13px",
-                          fontStyle: "normal",
-                          fontWeight: "600",
-                          color: "#0366d6",
-                          whitespace: "nowrap",
-                          verticalAlign: "middle",
-                          cursor: "pointer",
-                          background: "#fff",
-                          border: "1px solid #e1e4e8"
-                        }}
-                        onClick={() =>
-                          fetchMore({
-                            variables: {
-                              flimit: null,
-                              forwardCursor: null,
-                              blimit: 10,
-                              backwardsCursor: data.search.pageInfo.startCursor
-                            },
-                            updateQuery: (prev, { fetchMoreResult }) => {
-                              if (fetchMoreResult) {
-                                window.history.pushState(
-                                  {},
-                                  "",
-                                  `?q=${this.state.query}&s=${
-                                    prev.search.pageInfo.endCursor
-                                  }`
-                                );
-                              }
-                              return fetchMoreResult || prev;
-                            }
-                          })
-                        }
-                      >
-                        Previous
-                      </button>
-                    ) : null}
-                    {data.search.pageInfo.hasNextPage ? (
-                      <button
-                        style={{
-                          position: "relative",
-                          float: "left",
-                          padding: "7px 12px",
-                          marginLeft: "-1px",
-                          fontSize: "13px",
-                          fontStyle: "normal",
-                          fontWeight: "600",
-                          color: "#0366d6",
-                          whitespace: "nowrap",
-                          verticalAlign: "middle",
-                          cursor: "pointer",
-                          background: "#fff",
-                          border: "1px solid #e1e4e8"
-                        }}
-                        onClick={() =>
-                          fetchMore({
-                            variables: {
-                              flimit: 10,
-                              forwardCursor: data.search.pageInfo.endCursor,
-                              blimit: null,
-                              backwardsCursor: null
-                            },
-                            updateQuery: (prev, { fetchMoreResult }) => {
-                              if (fetchMoreResult) {
-                                window.history.pushState(
-                                  {},
-                                  "",
-                                  `?q=${this.state.query}&s=${
-                                    prev.search.pageInfo.endCursor
-                                  }`
-                                );
-                              }
-                              return fetchMoreResult || prev;
-                            }
-                          })
-                        }
-                      >
-                        Next{" "}
-                      </button>
-                    ) : null}
-                  </div>
-                </React.Fragment>
-              );
-            }}
-          </Query>
+          <Header
+            query={this.state.query}
+            onSearchChanged={this.onSearchChanged}
+          />
+          <SearchModule
+            query={this.state.query}
+            initialCursor={this.state.initialCursor}
+            onSearchChanged={this.onSearchChanged}
+          />
         </React.Fragment>
       </ApolloProvider>
     );

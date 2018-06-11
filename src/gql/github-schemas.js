@@ -1,3 +1,11 @@
+/**
+ * In order for Apollo to be able to parse the results that come back
+ * from GitHub, we have to prime it with the complex schemas. This is
+ * due to GitHub using union types in its search results. The
+ * suggested approach to doing this is to get these during a build
+ * step (or perhaps query them upon loading the app). For the sake
+ * of simplicity, we'll just manually load them.
+ */
 export const GITHUB_SCHEMAS = {
   introspectionQueryResultData: {
     __schema: {
