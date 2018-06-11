@@ -23,7 +23,7 @@ export const Header = ({ query, onSearchChanged }) => (
     ) : null}
     <li className="mr-1">
       <button
-        className="c-1 text-decoration-none pointer no-border bg-t"
+        className="c-1 text-decoration-none pointer no-border bgc-t"
         onClick={() => {
           onSearchChanged("");
         }}
